@@ -1,0 +1,38 @@
+eltex-pg1-v2@eltex-2026-autumn-19:33> mkdir -p D1/D2/D3
+eltex-pg1-v2@eltex-2026-autumn-19:33> touch D1/D2/file.txt
+eltex-pg1-v2@eltex-2026-autumn-19:33> vim D1/D2/file.txt
+eltex-pg1-v2@eltex-2026-autumn-19:33> ln -s D1/D2/file.txt D1/D2/D3/symlink.txt
+eltex-pg1-v2@eltex-2026-autumn-19:33> ln D1/D2/file.txt D1/D2/D3/hardlink.txt
+eltex-pg1-v2@eltex-2026-autumn-19:33> ls -li D1/D2/file.txt D1/D2/D3/
+917733 -rw-r--r-- 2 eltex-pg1-v2 eltex-pg1-v2    0 Oct 15 19:50 D1/D2/file.txt
+
+D1/D2/D3/:
+total 0
+917733 -rw-r--r-- 2 eltex-pg1-v2 eltex-pg1-v2  0 Oct 15 19:50 hardlink.txt
+917731 lrwxrwxrwx 1 eltex-pg1-v2 eltex-pg1-v2 14 Oct 15 19:48 symlink.txt -> D1/D2/file.txt
+eltex-pg1-v2@eltex-2026-autumn-19:33> mv D1/D2/file.txt D1/file.txt
+eltex-pg1-v2@eltex-2026-autumn-19:33> cat D1/D2/D3/hardlink.txt
+Something
+eltex-pg1-v2@eltex-2026-autumn-19:33> cat D1/D2/D3/symlink.txt
+cat: D1/D2/D3/symlink.txt: No such file or directory
+eltex-pg1-v2@eltex-2026-autumn-19:33> find / -type f -size +20M -exec du -h {} + 2>/dev/null > $USER_part3_gt20M.log
+eltex-pg1-v2@eltex-2026-autumn-19:33> export PS1='$USER@$HOSTNAME-$(date +%H:%M)> '
+eltex-pg1-v2@eltex-2026-autumn-19:59>
+eltex-pg1-v2@eltex-2026-autumn-20:00> find ~ -type f -mmin -1440
+/home/eltex-pg1-v2/ls
+/home/eltex-pg1-v2/.viminfo
+/home/eltex-pg1-v2/report_part1.txt
+/home/eltex-pg1-v2/D1/file.txt
+/home/eltex-pg1-v2/D1/D2/D3/hardlink.txt
+/home/eltex-pg1-v2/.bash_history
+eltex-pg1-v2@eltex-2026-autumn-20:02> which find
+/usr/bin/find
+eltex-pg1-v2@eltex-2026-autumn-20:03> file /usr/bin/find
+/usr/bin/find: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=5545a6c7162d325fbe5ffabcbfe4e5521b66ce70, for GNU/Linux 3.2.0, stripped
+eltex-pg1-v2@eltex-2026-autumn-20:03> file /boot/initrd.img*
+/boot/initrd.img-6.1.0-44-amd64: ASCII cpio archive (SVR4 with no CRC)
+/boot/initrd.img-6.1.0-50-amd64: ASCII cpio archive (SVR4 with no CRC)
+/boot/initrd.img-6.1.0-53-amd64: ASCII cpio archive (SVR4 with no CRC)
+
+
+

@@ -1,0 +1,137 @@
+eltex-pg1-v2@eltex-2026-autumn:~$ ls
+2026-01/                      2026-10/                      eltex-pg1-v2_part3.log
+2026-02/                      2026-11/                      eltex-pg1-v2_part.log
+2026-03/                      2026-12/                      .lesshst
+2026-04/                      .bash_history                 .profile
+2026-05/                      .bash_logout                  report_part1.txt
+2026-06/                      .bashrc                       .ssh/
+2026-07/                      .config/                      .viminfo
+2026-08/                      D1/
+2026-09/                      eltex-pg1-v2_part3_gt20M.log
+eltex-pg1-v2@eltex-2026-autumn:~$ $HIST
+$HISTCMD       $HISTCONTROL   $HISTFILE      $HISTFILESIZE  $HISTSIZE
+eltex-pg1-v2@eltex-2026-autumn:~$ echo $HISTFILESIZE
+2000
+eltex-pg1-v2@eltex-2026-autumn:~$ ls -d .*
+.bash_history  .bash_logout  .bashrc  .config  .lesshst  .profile  .ssh  .viminfo
+eltex-pg1-v2@eltex-2026-autumn:~$ screen -S "'whoami'_part2"
+  371  2026-10-15 19:16:25 which find >> eltex-pg1-v2_part3.log
+  372  2026-10-15 19:16:25 less eltex-pg1-v2_part3.log
+  373  2026-10-15 19:16:25 echo "file /usr/bin/find"
+  374  2026-10-15 19:16:25 echo "file /usr/bin/find" >> eltex-pg1-v2_part3.log
+  375  2026-10-15 19:16:25 file /usr/bin/find
+  376  2026-10-15 19:16:25 file /usr/bin/find >> eltex-pg1-v2_part3.log
+  377  2026-10-15 19:16:25 file $(which ls)
+  378  2026-10-15 19:16:25 file /boot/initrd.img
+  379  2026-10-15 19:16:25 file /boot/initrd.img*
+  380  2026-10-15 19:16:25 file /boot/initrd.img* >> eltex-pg1-v2_part3.log
+  381  2026-10-15 19:16:25 less eltex-pg1-v2_part3.log
+  382  2026-10-15 19:16:25 exit
+  383  2026-10-15 19:16:25 echo
+  384  2026-10-15 19:16:25 ssh-keygen
+  385  2026-10-15 19:16:25 ls -la ~/.ssh/
+  386  2026-10-15 19:16:25 ssh-copy-id root@172.16.9.176
+  387  2026-10-15 19:16:25 exit
+  388  2026-10-15 19:16:25 ssh root@172.16.9.176
+  389  2026-10-15 19:16:25 els
+  390  2026-10-15 19:16:25 ls
+  391  2026-10-15 19:16:25 ssh root@172.16.9.176
+  392  2026-10-15 19:16:25 screen
+  393  2026-10-15 19:16:25 screen -ls
+  394  2026-10-15 19:16:25 screen -r 1818991
+  395  2026-10-15 19:16:25 screen -S top -d -m top
+  396  2026-10-15 19:16:25 screen -ls
+  397  2026-10-15 19:16:25 screen -r top
+  398  2026-10-15 19:16:25 screen
+  399  2026-10-15 19:16:25 screen -ls
+  400  2026-10-15 19:16:25 logout
+  401  2026-10-15 19:16:25 echo $STY
+  402  2026-10-15 19:16:25 vi report_part1.txt
+  403  2026-10-15 19:16:25 exit
+  404  2026-10-15 19:16:25 w
+  405  2026-10-15 19:16:25 screen -ls
+  406  2026-10-15 19:16:25 exit
+  407  2026-10-15 19:16:25 watch /usr/bin/vmstat
+  408  2026-10-15 19:16:25 screen -ls
+  409  2026-10-15 19:16:25 screen -r top
+  410  2026-10-15 19:16:25 screen -r 1820590
+  411  2026-10-15 19:16:25 exit
+  412  2026-10-15 19:16:31 echo $STY
+  413  2026-10-15 19:16:43 echo $USER
+  414  2026-10-15 19:19:20 echo $HISTFILESIZE
+  415  2026-10-15 19:20:22 ls -d .*
+  416  2026-10-15 19:21:35 echo $STY
+  417  2026-10-15 19:21:48 export HISTTIMEFORMAT="%F %T "
+  418  2026-10-15 19:21:59 history
+eltex-pg1-v2@eltex-2026-autumn:~$ date
+Thu Oct 15 07:23:34 PM +07 2026
+eltex-pg1-v2@eltex-2026-autumn:~$ tail ~/.bash_history
+vi report_part1.txt
+exit
+w
+screen -ls
+exit
+watch /usr/bin/vmstat
+screen -ls
+screen -r top
+screen -r 1820590
+exit
+eltex-pg1-v2@eltex-2026-autumn:~$ export PROMPT_COMMAND="history -a"
+eltex-pg1-v2@eltex-2026-autumn:~$ whoami
+eltex-pg1-v2
+eltex-pg1-v2@eltex-2026-autumn:~$ tail ~/.bash_history
+#1792066919
+history
+#1792067014
+date
+#1792067033
+tail ~/.bash_history
+#1792067083
+export PROMPT_COMMAND="history -a"
+#1792067091
+whoami
+eltex-pg1-v2@eltex-2026-autumn:~$ DATE=$(date)
+eltex-pg1-v2@eltex-2026-autumn:~$ TIME=$(date +%T)
+eltex-pg1-v2@eltex-2026-autumn:~$ echo $DATE
+Thu Oct 15 07:27:32 PM +07 2026
+eltex-pg1-v2@eltex-2026-autumn:~$ echo $TIME
+19:28:37
+eltex-pg1-v2@eltex-2026-autumn:~$ DATE_TIME="$DATE $TIME"
+eltex-pg1-v2@eltex-2026-autumn:~$ echo $DATE_TIME
+Thu Oct 15 07:27:32 PM +07 2026 19:28:37
+eltex-pg1-v2@eltex-2026-autumn:~$ ls /bin /sbin | grep '[0-9]'
+dumpe2fs
+e2freefrag
+e2fsck
+e2image
+e2label
+e2mmpstatus
+e2scrub
+e2scrub_all
+e2undo
+e4crypt
+e4defrag
+fsck.ext2
+fsck.ext3
+fsck.ext4
+killall5
+mke2fs
+mkfs.ext2
+mkfs.ext3
+mkfs.ext4
+resize2fs
+tune2fs
+update-grub2
+eltex-pg1-v2@eltex-2026-autumn:~$ PS1="$USER@$HOSTNAME-$(date +%H:%M)> "
+eltex-pg1-v2@eltex-2026-autumn-19:33>
+eltex-pg1-v2@eltex-2026-autumn-19:33> export PS1
+eltex-pg1-v2@eltex-2026-autumn-19:33> bash --norc
+eltex-pg1-v2@eltex-2026-autumn-19:33>
+eltex-pg1-v2@eltex-2026-autumn-19:33> exit
+exit
+eltex-pg1-v2@eltex-2026-autumn-19:33> mkdir ~/$(date +%Y)-{01..12}
+eltex-pg1-v2@eltex-2026-autumn-19:33> ls
+2026-01  2026-04  2026-07  2026-10  D1                            eltex-pg1-v2_part.log
+2026-02  2026-05  2026-08  2026-11  eltex-pg1-v2_part3_gt20M.log  report_part1.txt
+2026-03  2026-06  2026-09  2026-12  eltex-pg1-v2_part3.log
+

@@ -1,0 +1,300 @@
+eltex-pg1-v2@eltex-2026-autumn:~$ ssh-keygen -t rsa
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/eltex-pg1-v2/.ssh/id_rsa):
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/eltex-pg1-v2/.ssh/id_rsa
+Your public key has been saved in /home/eltex-pg1-v2/.ssh/id_rsa.pub
+The key fingerprint is:
+SHA256:N63doS3MtURAA7bOthbVaQC7OiknNEvxCNc+N7jX5E4 eltex-pg1-v2@eltex-2026-autumn
+The key's randomart image is:
++---[RSA 3072]----+
+|          ++=    |
+|       . . o = . |
+|    . o . o . =  |
+|     o = + + o   |
+|      = S @ o +  |
+|     o o O & * o |
+|      + * = E +  |
+|       + + o .   |
+|            .    |
++----[SHA256]-----+
+eltex-pg1-v2@eltex-2026-autumn:~$ ssh-copy-id root@172.16.9.176
+/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/home/eltex-pg1-v2/.ssh/id_rsa.pub"
+/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+root@172.16.9.176's password:
+
+Number of key(s) added: 1
+
+Now try logging into the machine, with:   "ssh 'root@172.16.9.176'"
+and check to make sure that only the key(s) you wanted were added.
+eltex-pg1-v2@eltex-2026-autumn:~$ ssh root@172.16.9.176
+root@eltex-practice2-pg1-v2:~# exit
+exit
+eltex-pg1-v2@eltex-2026-autumn:~$ diff <(cat ~/.ssh/*.pub) <(ssh root@172.16.9.176 cat /root/.ssh/authorized_keys)
+eltex-pg1-v2@eltex-2026-autumn:~$
+root@eltex-practice2-pg1-v2:~# ls -ld ~/.ssh
+drwx------ 2 root root 4096 Oct 15 13:59 /root/.ssh
+eltex-pg1-v2@eltex-2026-autumn:~$ ls -ld ~/.ssh
+drwx------ 2 eltex-pg1-v2 eltex-pg1-v2 4096 Oct 15 20:59 /home/eltex-pg1-v2/.ssh
+root@eltex-practice2-pg1-v2:~# useradd -m -s /bin/bash user1
+root@eltex-practice2-pg1-v2:~# passwd user1
+New password:
+Retype new password:
+passwd: password updated successfully
+root@eltex-practice2-pg1-v2:~# adduser user2
+info: Adding user `user2' ...
+info: Selecting UID/GID from range 1000 to 59999 ...
+info: Adding new group `user2' (1002) ...
+info: Adding new user `user2' (1002) with group `user2 (1002)' ...
+info: Creating home directory `/home/user2' ...
+info: Copying files from `/etc/skel' ...
+New password:
+Retype new password:
+passwd: password updated successfully
+Changing the user information for user2
+Enter the new value, or press ENTER for the default
+        Full Name []:
+        Room Number []:
+        Work Phone []:
+        Home Phone []:
+        Other []:
+Is the information correct? [Y/n] y
+info: Adding new user `user2' to supplemental / extra groups `users' ...
+info: Adding user `user2' to group `users' ...
+root@eltex-practice2-pg1-v2:~# adduser user3
+info: Adding user `user3' ...
+info: Selecting UID/GID from range 1000 to 59999 ...
+info: Adding new group `user3' (1003) ...
+info: Adding new user `user3' (1003) with group `user3 (1003)' ...
+info: Creating home directory `/home/user3' ...
+info: Copying files from `/etc/skel' ...
+New password:
+Retype new password:
+passwd: password updated successfully
+Changing the user information for user3
+Enter the new value, or press ENTER for the default
+        Full Name []:
+        Room Number []:
+        Work Phone []:
+        Home Phone []:
+        Other []:
+Is the information correct? [Y/n] y
+info: Adding new user `user3' to supplemental / extra groups `users' ...
+info: Adding user `user3' to group `users' ...
+root@eltex-practice2-pg1-v2:~# usermod -s /usr/sbin/nologin user3
+root@eltex-practice2-pg1-v2:~# su - user3
+This account is currently not available.
+root@eltex-practice2-pg1-v2:~# su -s /bin/bash user3
+user3@eltex-practice2-pg1-v2:/root$
+user3@eltex-practice2-pg1-v2:/root$ exit
+exit
+root@eltex-practice2-pg1-v2:~# groupadd group1
+root@eltex-practice2-pg1-v2:~# usermod -aG group1 user1
+root@eltex-practice2-pg1-v2:~# usermod -aG group1 user2
+root@eltex-practice2-pg1-v2:~# usermod -aG group1 user3
+root@eltex-practice2-pg1-v2:~# groups user1 user2 user3
+user1 : user1 group1
+user2 : user2 users group1
+user3 : user3 users group1
+root@eltex-practice2-pg1-v2:~# mkdir -p /opt/share
+root@eltex-practice2-pg1-v2:~# chgrp group1 /opt/share
+root@eltex-practice2-pg1-v2:~# chmod 2770 /opt/share
+root@eltex-practice2-pg1-v2:~# ls -ld /opt/share
+drwxrws--- 2 root group1 4096 Oct 19 05:35 /opt/share
+root@eltex-practice2-pg1-v2:~# echo "umask 0027" >> /home/user1/.bashrc
+root@eltex-practice2-pg1-v2:~# su - user1
+user1@eltex-practice2-pg1-v2:~$ umask
+0027
+user1@eltex-practice2-pg1-v2:~$ touch /opt/share/file1.txt
+user1@eltex-practice2-pg1-v2:~$ exit
+logout
+root@eltex-practice2-pg1-v2:~# su - user2
+user2@eltex-practice2-pg1-v2:~$ touch /opt/share/file2.txt
+user2@eltex-practice2-pg1-v2:~$ exit
+logout
+root@eltex-practice2-pg1-v2:~# su -s /bin/bash user3
+user3@eltex-practice2-pg1-v2:/root$ touch /opt/share/file3.txt
+user3@eltex-practice2-pg1-v2:/root$ exit
+exit
+root@eltex-practice2-pg1-v2:~# su - user1
+user1@eltex-practice2-pg1-v2:~$ ls -l /opt/share
+total 0
+-rw-r----- 1 user1 group1 0 Oct 19 05:40 file1.txt
+-rw-rw-r-- 1 user2 group1 0 Oct 19 05:41 file2.txt
+-rw-rw-r-- 1 user3 group1 0 Oct 19 05:41 file3.txt
+user1@eltex-practice2-pg1-v2:~$ rm /opt/share/file2.txt
+user1@eltex-practice2-pg1-v2:~$ rm /opt/share/file3.txt
+user1@eltex-practice2-pg1-v2:~$ ls -l /opt/share
+total 0
+-rw-r----- 1 user1 group1 0 Oct 19 05:40 file1.txt
+user1@eltex-practice2-pg1-v2:~$ exit
+logout
+root@eltex-practice2-pg1-v2:~# chmod +t /opt/share
+root@eltex-practice2-pg1-v2:~# su - user1
+user1@eltex-practice2-pg1-v2:~$ touch /opt/share/file1.txt
+user1@eltex-practice2-pg1-v2:~$ exit
+logout
+root@eltex-practice2-pg1-v2:~# su - user2
+user2@eltex-practice2-pg1-v2:~$ touch /opt/share/file2.txt
+user2@eltex-practice2-pg1-v2:~$ exit
+logout
+root@eltex-practice2-pg1-v2:~# su -s /bin/bash user3
+user3@eltex-practice2-pg1-v2:/root$ touch /opt/share/file3.txt
+user3@eltex-practice2-pg1-v2:/root$ exit
+exit
+root@eltex-practice2-pg1-v2:~# su - user1
+user1@eltex-practice2-pg1-v2:~$ ls -l /opt/share
+total 0
+-rw-r----- 1 user1 group1 0 Oct 19 05:44 file1.txt
+-rw-rw-r-- 1 user2 group1 0 Oct 19 05:44 file2.txt
+-rw-rw-r-- 1 user3 group1 0 Oct 19 05:45 file3.txt
+user1@eltex-practice2-pg1-v2:~$ rm /opt/share/file2.txt
+rm: cannot remove '/opt/share/file2.txt': Operation not permitted
+user1@eltex-practice2-pg1-v2:~$ rm /opt/share/file3.txt
+rm: cannot remove '/opt/share/file3.txt': Operation not permitted
+root@eltex-practice2-pg1-v2:~# which dmesg
+/usr/bin/dmesg
+root@eltex-practice2-pg1-v2:~# echo "user1 ALL=(root) /usr/bin/dmesg" > /etc/sudoers.d/user1_dmesg
+root@eltex-practice2-pg1-v2:~# sudo -l -U user1
+Matching Defaults entries for user1 on eltex-practice2-pg1-v2:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin,
+    use_pty
+
+User user1 may run the following commands on eltex-practice2-pg1-v2:
+    (root) /usr/bin/dmesg
+    (ALL) /usr/bin/dmesg
+root@eltex-practice2-pg1-v2:~# vi /usr/local/bin/user2_script.sh
+user1@eltex-practice2-pg1-v2:~$ sudo dmesg
+
+ЧАСТЬ ВЫВОДА:
+_load" profile="unconfined" name="balena-etcher" pid=563 comm="apparmor_parser"
+[   26.471116] audit: type=1400 audit(1792343776.330:7): apparmor="STATUS" operation="profile_load" profile="unconfined" name="brave" pid=565 comm="apparmor_parser"
+[   26.471409] audit: type=1400 audit(1792343776.330:8): apparmor="STATUS" operation="profile_load" profile="unconfined" name="buildah" pid=566 comm="apparmor_parser"
+[   26.472712] audit: type=1400 audit(1792343776.331:9): apparmor="STATUS" operation="profile_load" profile="unconfined" name="busybox" pid=567 comm="apparmor_parser"
+[   26.473029] audit: type=1400 audit(1792343776.332:10): apparmor="STATUS" operation="profile_load" profile="unconfined" name="cam" pid=568 comm="apparmor_parser"
+[   26.474364] audit: type=1400 audit(1792343776.333:11): apparmor="STATUS" operation="profile_load" profile="unconfined" name="ch-checkns" pid=569 comm="apparmor_parser"
+[   28.859850] workqueue: drm_fb_helper_damage_work hogged CPU for >10000us 64 times, consider switching to WQ_UNBOUND
+[   34.645680] NET: Registered PF_QIPCRTR protocol family
+[   40.585003] loop0: detected capacity change from 0 to 8
+[   42.686600] kauditd_printk_skb: 109 callbacks suppressed
+[   42.686604] audit: type=1400 audit(1792343792.545:121): apparmor="STATUS" operation="profile_replace" info="same as current profile, skipping" profile="unconfined" name="/usr/lib/snapd/snap-confine" pid=833 comm="apparmor_parser"
+[44032.759861] systemd-journald[307]: /var/log/journal/560b026a44d3424ea490d29e1a7e2775/user-1003.journal: Journal file uses a different sequence number ID, rotating.
+
+root@eltex-practice2-pg1-v2:~# chown root:root /usr/local/bin/user2_script.sh
+root@eltex-practice2-pg1-v2:~# chmod 4755 /usr/local/bin/user2_script.sh
+root@eltex-practice2-pg1-v2:~# ls -l /usr/local/bin/user2_script.sh
+-rwsr-xr-x 1 root root 162 Oct 19 06:10 /usr/local/bin/user2_script.sh
+root@eltex-practice2-pg1-v2:~# su - user2
+user2@eltex-practice2-pg1-v2:~$ /usr/local/bin/user2_script.sh
+Скрипт выполняется от имени: user2
+--- Вывод dmesg (первые 3 строки) ---
+dmesg: read kernel buffer failed: Operation not permitted
+root@eltex-practice2-pg1-v2:~# chage -M 10 user1
+root@eltex-practice2-pg1-v2:~# chage -M 10 user2
+root@eltex-practice2-pg1-v2:~# chage -M 10 user3
+root@eltex-practice2-pg1-v2:~# chage -l user1
+Last password change                                    : Oct 15, 2026
+Password expires                                        : Oct 25, 2026
+Password inactive                                       : never
+Account expires                                         : never
+Minimum number of days between password change          : 0
+Maximum number of days between password change          : 10
+Number of days of warning before password expires       : 7
+root@eltex-practice2-pg1-v2:~# vi/etc/motd
+root@eltex-practice2-pg1-v2:~# cat /etc/motd
+Анисин Дмитрий
+root@eltex-practice2-pg1-v2:~# rsync -av /etc/ /root/etc_backup/
+
+ЧАСТЬ ВЫВОДА:
+vmware-tools/vgauth/schemas/saml-schema-assertion-2.0.xsd
+vmware-tools/vgauth/schemas/xenc-schema.xsd
+vmware-tools/vgauth/schemas/xml.xsd
+vmware-tools/vgauth/schemas/xmldsig-core-schema.xsd
+xdg/
+xdg/user-dirs.conf
+xdg/user-dirs.defaults
+xdg/autostart/
+xdg/autostart/snap-userd-autostart.desktop
+xdg/autostart/xdg-user-dirs.desktop
+xdg/systemd/
+xdg/systemd/user -> ../../systemd/user
+xml/
+xml/catalog
+xml/catalog.old
+xml/polkitd.xml
+xml/polkitd.xml.old
+xml/xml-core.xml
+xml/xml-core.xml.old
+
+root@eltex-practice2-pg1-v2:~# cd /root/etc_backup
+root@eltex-practice2-pg1-v2:~# tar -czvf /root/etc_backup.tar.gz .
+root@eltex-practice2-pg1-v2:~# tar -cjvf /root/etc_backup.tar.bz2 .
+root@eltex-practice2-pg1-v2:~# 7z a /root/etc_backup.tar.7z /root/etc_backup.tar
+
+ВЫВОДЫ ИЗ КОМАНД ВЫШЕ СЛИШКОМ ДЛИННЫЕ ЧТОБЫ ПОМЕСТИТЬСЯ В КОНСОЛЬ
+
+root@eltex-practice2-pg1-v2:~/etc_backup# ls -lh /root/etc_backup.tar.gz /root/etc_backup.tar.bz2 /root/etc_backup.tar.7z
+-rw-r--r-- 1 root root 455K Oct 19 06:21 /root/etc_backup.tar.7z
+-rw-r--r-- 1 root root 527K Oct 19 06:19 /root/etc_backup.tar.bz2
+-rw-r--r-- 1 root root 563K Oct 19 06:18 /root/etc_backup.tar.gz
+root@eltex-practice2-pg1-v2:~/etc_backup# date >> /etc/motd
+root@eltex-practice2-pg1-v2:~/etc_backup# cd ..
+root@eltex-practice2-pg1-v2:~# rsync -av /etc/ /root/etc_backup/
+sending incremental file list
+motd
+
+sent 66,453 bytes  received 279 bytes  133,464.00 bytes/sec
+total size is 2,332,258  speedup is 34.95
+root@eltex-practice2-pg1-v2:~# tar -rzf /root/etc_backup.tar.gz -C /root/etc_backup ./motd
+tar: Cannot update compressed archives
+Try 'tar --help' or 'tar --usage' for more information.
+root@eltex-practice2-pg1-v2:~# gunzip etc_backup.tar.gz
+gzip: etc_backup.tar already exists; do you wish to overwrite (y or n)? y
+root@eltex-practice2-pg1-v2:~# tar -rf etc_backup.tar -C /root/etc_backup ./motd
+root@eltex-practice2-pg1-v2:~# gzip etc_backup.tar
+root@eltex-practice2-pg1-v2:~# mkdir -p /tmp/etc_bz2_extract
+root@eltex-practice2-pg1-v2:~# tar -xjf /root/etc_backup.tar.bz2 -C /tmp/etc_bz2_extract
+root@eltex-practice2-pg1-v2:~# diff -r /tmp/etc_bz2_extract /root/etc_backup
+diff -r /tmp/etc_bz2_extract/motd /root/etc_backup/motd
+1a2
+> Mon Oct 19 06:23:43 AM UTC 2026
+diff: /tmp/etc_bz2_extract/mtab: No such file or directory
+diff: /root/etc_backup/mtab: No such file or directory
+diff: /tmp/etc_bz2_extract/os-release: No such file or directory
+diff: /root/etc_backup/os-release: No such file or directory
+diff: /tmp/etc_bz2_extract/resolv.conf: No such file or directory
+diff: /root/etc_backup/resolv.conf: No such file or directory
+root@eltex-practice2-pg1-v2:~# rm -rf /tmp/etc_bz2_extract
+root@eltex-practice2-pg1-v2:~# mkdir -p /root/etc_backup_gzip
+root@eltex-practice2-pg1-v2:~# mkdir -p /root/etc_backup_7zip
+root@eltex-practice2-pg1-v2:~# tar -xzf /root/etc_backup.tar.gz -C /root/etc_backup_gzip
+root@eltex-practice2-pg1-v2:~# 7z x /root/etc_backup.tar.7z -o/root/etc_backup_7zip
+
+7-Zip 23.01 (x64) : Copyright (c) 1999-2023 Igor Pavlov : 2023-06-20
+ 64-bit locale=en_US.UTF-8 Threads:2 OPEN_MAX:1024
+
+Scanning the drive for archives:
+1 file, 465814 bytes (455 KiB)
+
+Extracting archive: /root/etc_backup.tar.7z
+--
+Path = /root/etc_backup.tar.7z
+Type = 7z
+Physical Size = 465814
+Headers Size = 138
+Method = LZMA2:22
+Solid = -
+Blocks = 1
+
+Everything is Ok
+
+Size:       3420160
+Compressed: 465814
+root@eltex-practice2-pg1-v2:~# tar -xf /root/etc_backup_7zip/etc_backup.tar -C /root/etc_backup_7zip
+root@eltex-practice2-pg1-v2:~# diff /root/etc_backup_gzip/motd /root/etc_backup_7zip/motd
+2d1
+< Mon Oct 19 06:23:43 AM UTC 2026
+
