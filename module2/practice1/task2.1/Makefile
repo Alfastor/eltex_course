@@ -8,7 +8,6 @@ CFLAGS = -Wall -Wextra -std=c11 -g
 TARGET = phonebook
 OBJS = main.o contact.o input.o
 
-# --- НОВЫЕ ПЕРЕМЕННЫЕ ДЛЯ ТЕСТОВ ---
 TEST_TARGET = test_runner
 INC_DIRS = -Iunity -I.
 TEST_OBJS = test/test_main.o contact.o input.o unity/unity.o

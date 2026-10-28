@@ -62,6 +62,39 @@ void test_contact_not_found(void) {
     TEST_ASSERT_EQUAL_INT(-1, index);
 }
 
+void test_contact_edit(void) {
+    // 1. Добавляем контакт
+    Contact c;
+    memset(&c, 0, sizeof(Contact));
+    strcpy(c.lastName, "OldLastName");
+    strcpy(c.firstName, "OldFirstName");
+    contact_add(&c);
+
+    // 2. Находим его индекс
+    int idx = contact_find("OldLastName", "OldFirstName");
+    TEST_ASSERT_NOT_EQUAL(-1, idx);
+
+    // 3. Создаем новые данные
+    Contact new_c;
+    memset(&new_c, 0, sizeof(Contact));
+    strcpy(new_c.lastName, "NewLastName");
+    strcpy(new_c.firstName, "NewFirstName");
+    strcpy(new_c.phone, "1234567");
+
+    // 4. Редактируем
+    int edit_result = contact_edit(idx, &new_c);
+    TEST_ASSERT_EQUAL_INT(CONTACT_SUCCESS, edit_result);
+
+    // 5. Проверяем, что данные обновились
+    const Contact* updated = contact_get(idx);
+    TEST_ASSERT_EQUAL_STRING("NewLastName", updated->lastName);
+    TEST_ASSERT_EQUAL_STRING("NewFirstName", updated->firstName);
+    TEST_ASSERT_EQUAL_STRING("1234567", updated->phone);
+
+    // 6. Проверяем, что старые данные больше не находятся
+    TEST_ASSERT_EQUAL_INT(-1, contact_find("OldLastName", "OldFirstName"));
+}
+
 int main(void) {
     UNITY_BEGIN();
     RUN_TEST(test_parse_int_valid_input);
@@ -70,6 +103,7 @@ int main(void) {
     RUN_TEST(test_validate_required_string);
     RUN_TEST(test_contact_add_and_find);
     RUN_TEST(test_contact_add_invalid_data);
+    RUN_TEST(test_contact_edit);
     RUN_TEST(test_contact_not_found);
     return UNITY_END();
 }
