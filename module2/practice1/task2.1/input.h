@@ -1,13 +1,14 @@
 #ifndef INPUT_H
 #define INPUT_H
+#include <stdbool.h>
 
-// Очистка буфера ввода (удаление символов до '\n' или EOF)
-void clear_buffer(void);
+// Парсит строку в целое число в заданном диапазоне. Возвращает true при успехе.
+bool input_parse_int(const char* str, int min, int max, int* out_val);
 
-// Ввод строки. is_required = 1 (обязательное поле), 0 (необязательное)
-void input_string(const char* prompt, char* buffer, int max_len, int is_required);
+// Парсит строку в число с плавающей точкой. Возвращает true при успехе.
+bool input_parse_double(const char* str, double* out_val);
 
-// Ввод целого числа в заданном диапазоне
-int input_int(const char* prompt, int min, int max);
+// Проверяет строку (например, на пустоту). Возвращает true, если строка валидна.
+bool input_validate_string(const char* str, bool is_required);
 
 #endif // INPUT_H

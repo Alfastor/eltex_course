@@ -15,10 +15,21 @@ typedef struct {
     char messenger[MAX_STR];
 } Contact;
 
-void add_contact(void);
-void edit_contact(void);
-void delete_contact(void);
-void print_all_contacts(void);
-void find_and_print_contact(void);
+// Коды возврата для удобства тестирования
+#define CONTACT_SUCCESS 0
+#define CONTACT_ERR_FULL -1
+#define CONTACT_ERR_NOT_FOUND -2
+#define CONTACT_ERR_INVALID -3
+
+// Управление базой
+int contact_add(const Contact* c);
+int contact_edit(int index, const Contact* new_data);
+int contact_delete(int index);
+void contact_clear(void);
+
+// Поиск и получение данных
+int contact_find(const char* lname, const char* fname);
+const Contact* contact_get(int index);
+int contact_get_count(void);
 
 #endif // CONTACT_H
