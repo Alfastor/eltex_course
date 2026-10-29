@@ -49,23 +49,64 @@ void print_contact(const Contact* c) {
     if (strlen(c->messenger) > 0) printf("Мессенджер: %s\n", c->messenger);
 }
 
-void ui_add_contact() {
-    Contact c;
-    memset(&c, 0, sizeof(Contact));
+// Функция для редактирования одной строки
+void prompt_edit_string(const char* prompt, char* dest, int size, bool required) {
+    char buf[BUF_SIZE];
     
-    printf("\n--- Добавление контакта ---\n");
-    prompt_string("Фамилия: ", c.lastName, MAX_STR, true);
-    prompt_string("Имя: ", c.firstName, MAX_STR, true);
-    prompt_string("Место работы: ", c.company, MAX_STR, false);
-    prompt_string("Должность: ", c.position, MAX_STR, false);
-    prompt_string("Телефон: ", c.phone, 20, false);
-    prompt_string("Email: ", c.email, MAX_STR, false);
-    prompt_string("Ссылка на соцсеть: ", c.social, MAX_STR, false);
-    prompt_string("Профиль в мессенджере: ", c.messenger, MAX_STR, false);
+    // Выводим подсказку и текущее значение (если оно есть)
+    printf("%s [%s]: ", prompt, strlen(dest) > 0 ? dest : "пусто");
+    read_line(buf, BUF_SIZE);
 
-    int res = contact_add(&c);
-    if (res == CONTACT_SUCCESS) printf("  [Успех] Контакт добавлен.\n");
-    else printf("  [Ошибка] Не удалось добавить контакт (база переполнена).\n");
+    if (strcmp(buf, "-") == 0) {
+        // Пользователь ввел минус - пытаемся очистить
+        if (required) {
+            printf("  [Ошибка] Это поле обязательное, его нельзя очистить!\n");
+        } else {
+            dest[0] = '\0'; // Очищаем строку
+        }
+    } else if (strlen(buf) > 0) {
+        // Пользователь ввел новый текст - заменяем старое значение
+        strncpy(dest, buf, size - 1);
+        dest[size - 1] = '\0'; // Страховка для нуль-терминатора
+    }
+    // Если buf пуст (пользователь нажал Enter), мы просто ничего не делаем, 
+    // и в dest остается старое значение.
+}
+
+void ui_edit_contact() {
+    char lname[MAX_STR], fname[MAX_STR];
+    prompt_string("Введите фамилию для поиска: ", lname, MAX_STR, true);
+    prompt_string("Введите имя для поиска: ", fname, MAX_STR, true);
+    
+    int idx = contact_find(lname, fname);
+    if (idx == -1) {
+        printf("  [Ошибка] Контакт не найден.\n");
+        return;
+    }
+
+    // Копируем текущие данные контакта во временную структуру
+    Contact temp_data = *contact_get(idx);
+
+    printf("\n--- Редактирование: %s %s ---\n", temp_data.lastName, temp_data.firstName);
+    printf("Нажмите Enter, чтобы оставить поле без изменений.\n");
+    printf("Введите '-' чтобы очистить необязательное поле.\n\n");
+    
+    // Вызываем новую функцию для каждого поля
+    prompt_edit_string("Фамилия", temp_data.lastName, MAX_STR, true);
+    prompt_edit_string("Имя", temp_data.firstName, MAX_STR, true);
+    prompt_edit_string("Место работы", temp_data.company, MAX_STR, false);
+    prompt_edit_string("Должность", temp_data.position, MAX_STR, false);
+    prompt_edit_string("Телефон", temp_data.phone, 20, false);
+    prompt_edit_string("Email", temp_data.email, MAX_STR, false);
+    prompt_edit_string("Ссылка на соцсеть", temp_data.social, MAX_STR, false);
+    prompt_edit_string("Профиль в мессенджере", temp_data.messenger, MAX_STR, false);
+
+    // Сохраняем изменения в базу
+    if (contact_edit(idx, &temp_data) == CONTACT_SUCCESS) {
+        printf("  [Успех] Контакт обновлен.\n");
+    } else {
+        printf("  [Ошибка] Не удалось обновить контакт.\n");
+    }
 }
 
 void ui_print_all() {
