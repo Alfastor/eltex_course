@@ -73,6 +73,34 @@ void prompt_edit_string(const char* prompt, char* dest, int size, bool required)
     // и в dest остается старое значение.
 }
 
+void ui_add_contact() {
+    // Создаем локальную структуру и зануляем её, чтобы в полях не было мусора
+    Contact c;
+    memset(&c, 0, sizeof(Contact));
+    
+    printf("\n--- Добавление контакта ---\n");
+    
+    // Обязательные поля (последний аргумент true - проверка на пустоту)
+    prompt_string("Фамилия: ", c.lastName, MAX_STR, true);
+    prompt_string("Имя: ", c.firstName, MAX_STR, true);
+    
+    // Необязательные поля (последний аргумент false - можно нажать Enter)
+    prompt_string("Место работы: ", c.company, MAX_STR, false);
+    prompt_string("Должность: ", c.position, MAX_STR, false);
+    prompt_string("Телефон: ", c.phone, 20, false);
+    prompt_string("Email: ", c.email, MAX_STR, false);
+    prompt_string("Ссылка на соцсеть: ", c.social, MAX_STR, false);
+    prompt_string("Профиль в мессенджере: ", c.messenger, MAX_STR, false);
+
+    // Вызываем функцию добавления из модуля базы данных (contact.c)
+    int res = contact_add(&c);
+    if (res == CONTACT_SUCCESS) {
+        printf("  [Успех] Контакт добавлен.\n");
+    } else {
+        printf("  [Ошибка] Не удалось добавить контакт (база переполнена).\n");
+    }
+}
+
 void ui_edit_contact() {
     char lname[MAX_STR], fname[MAX_STR];
     prompt_string("Введите фамилию для поиска: ", lname, MAX_STR, true);
@@ -137,40 +165,6 @@ void ui_find_contact() {
         printf("  [Ошибка] Контакт не найден.\n");
     }
 }
-
-// --- НОВАЯ ФУНКЦИЯ РЕДАКТИРОВАНИЯ ---
-void ui_edit_contact() {
-    char lname[MAX_STR], fname[MAX_STR];
-    prompt_string("Введите фамилию для поиска: ", lname, MAX_STR, true);
-    prompt_string("Введите имя для поиска: ", fname, MAX_STR, true);
-    
-    int idx = contact_find(lname, fname);
-    if (idx == -1) {
-        printf("  [Ошибка] Контакт не найден.\n");
-        return;
-    }
-
-    printf("\n--- Редактирование: %s %s ---\n", contact_get(idx)->lastName, contact_get(idx)->firstName);
-    
-    Contact new_data;
-    memset(&new_data, 0, sizeof(Contact));
-    
-    prompt_string("Новая Фамилия: ", new_data.lastName, MAX_STR, true);
-    prompt_string("Новое Имя: ", new_data.firstName, MAX_STR, true);
-    prompt_string("Новое место работы: ", new_data.company, MAX_STR, false);
-    prompt_string("Новая должность: ", new_data.position, MAX_STR, false);
-    prompt_string("Новый телефон: ", new_data.phone, 20, false);
-    prompt_string("Новый Email: ", new_data.email, MAX_STR, false);
-    prompt_string("Новая соцсеть: ", new_data.social, MAX_STR, false);
-    prompt_string("Новый мессенджер: ", new_data.messenger, MAX_STR, false);
-
-    if (contact_edit(idx, &new_data) == CONTACT_SUCCESS) {
-        printf("  [Успех] Контакт обновлен.\n");
-    } else {
-        printf("  [Ошибка] Не удалось обновить контакт.\n");
-    }
-}
-// -----------------------------------
 
 void ui_delete_contact() {
     char lname[MAX_STR], fname[MAX_STR];
