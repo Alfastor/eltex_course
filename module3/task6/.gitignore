@@ -1,0 +1,3 @@
+*.o
+udp_chat
+tests/unit_test
